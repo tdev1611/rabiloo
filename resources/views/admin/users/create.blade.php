@@ -1,6 +1,7 @@
 @extends('admin.layout')
 @section('content')
     <x-admin.tiny-edit />
+
     <div class="d-flex flex-column flex-column-fluid">
         <!--begin::Toolbar-->
         <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
@@ -10,7 +11,7 @@
                 <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                     <!--begin::Title-->
                     <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
-                        permission </h1>
+                        User </h1>
                     <!--end::Title-->
                     <!--begin::Breadcrumb-->
                     <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -25,12 +26,12 @@
                         </li>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <li class="breadcrumb-item text-muted"> Edit permission- Name : <b>{{ $permission->name }}</b></li>
+                        <li class="breadcrumb-item text-muted"> Add User </li>
                         <!--end::Item-->
                     </ul>
                     <!--end::Breadcrumb-->
                 </div>
-                <a href="{{ route('admin.permissions.create') }}" class="btn btn-primary">Back</a>
+                <a href="{{ route('admin.users.index') }}" class="btn btn-primary">Back</a>
             </div>
             <!--end::Toolbar container-->
             {{-- component alert --}}
@@ -42,30 +43,36 @@
                 <div class="row">
                     <div class="col-12 ">
                         {{-- content --}}
-                        <form method="POST" id="form_update_permission"
-                            action="{{ route('admin.permissions.update', $permission->id) }}">
+                        <form method="POST" id="form_add_user" action="{{ route('admin.users.store') }}">
                             <div class="row">
-                                <div class="col-md-5">
-                                    <div class="mb-3 col-md-12">
-                                        <label for="name" class="form-label"> Name </label>
-                                        <input type="text" class="form-control" name="name" id="name"
-                                            placeholder="name " value="{{ $permission->name }}">
-                                    </div>
-
-                                    <div class="mb-3 col-md-12">
-                                        <label for="desc" class="form-label"> Desc </label>
-                                        <input type="text" class="form-control" name="guard_name" id="guard_name"
-                                            placeholder="desc " value="{{ $permission->guard_name }}">
-                                    </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="name" class="form-label"> name </label>
+                                    <input type="text" class="form-control" name="name" id="name"
+                                        placeholder="name " value="">
                                 </div>
-                                {{-- data --}}
+                                <div class="mb-3 col-md-6">
+                                    <label for="email" class="form-label"> email </label>
+                                    <input type="text" class="form-control" name="email" id="email"
+                                        placeholder="email " value="">
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="password" class="form-label"> password </label>
+                                    <input type="password" class="form-control" name="password" id="password"
+                                        placeholder="password " value="">
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="role_id" class="form-label"> Roles </label>
+                                    <select class="form-select" multiple aria-label="multiple select example"
+                                        name="role_id[]">
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        @endforeach
 
-                                <div class="col-md-7 table-responsive" style="border-left:1px solid rgb(74, 63, 49)">
-                                    {{-- //data --}}
-                                    <x-admin.table-permission />
-
+                                    </select>
                                 </div>
                             </div>
+
+
 
                             <div class="input-group mb-3 mt-3">
                                 <button type="submit" class="btn btn-primary">Thêm</button>
@@ -78,13 +85,12 @@
 
         </div>
 
-
     </div>
 @endsection
 
 @section('js')
     <script>
-        $('#form_update_permission').submit(function(e) {
+        $('#form_add_user').submit(function(e) {
             e.preventDefault();
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
             $.ajaxSetup({
@@ -93,7 +99,7 @@
                 }
             });
             $.ajax({
-                type: 'PUT',
+                type: 'POST',
                 url: $(this).attr('action'),
                 data: $(this).serialize(),
                 dataType: "json",
@@ -107,38 +113,34 @@
                                 timer: 2000
                             })
                             .then((result) => {
-                                window.location.href = "{{ route('admin.permissions.create') }}"
+                                location.reload();
                             })
                     } else {
                         Swal.fire({
                             icon: 'error',
                             title: response.message,
                             showConfirmButton: false,
-                            timer: 2000
+                            timer: 5000
                         }).then((result) => {
 
                         })
                     }
+
                 },
                 error: function(error) {
                     console.log(error);
-                    // Swal.fire({
-                    //     icon: 'error',
-                    //     title: error.responseJSON.message,
-                    //     showConfirmButton: false,
-                    //     timer: 2000
-                    // }).then((result) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.responseJSON.message,
+                        showConfirmButton: false,
+                        timer: 5000
+                    }).then((result) => {
 
-                    // })
+                    })
                 }
             });
         })
     </script>
- <script>
-    $(document).ready(function() {
-        $('#myTable').DataTable({
 
-        });
-    });
-</script>
+    <x-admin.create-slug />
 @endsection

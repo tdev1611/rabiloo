@@ -2,6 +2,7 @@
 
 namespace App\Services\Admin;
 
+use App\Http\Resources\RoleResource;
 use Spatie\Permission\Models\Role;
 
 
@@ -15,13 +16,7 @@ class RoleService
 
     function getAll()
     {
-        return $this->role->oldest('name')->get();
-    }
-
-    // get status ==1
-    function getroleActive()
-    {
-        return $this->role->where('status', 1)->latest()->get();
+        return  RoleResource::collection($this->role->oldest('name')->get());
     }
 
     function find($id)
@@ -38,6 +33,10 @@ class RoleService
         return $this->role->create($data);
     }
 
+    function getRoleById($id)
+    {
+        return  new RoleResource($this->find($id));
+    }
     function update($id, $data)
     {
         $role = $this->find($id);
@@ -47,7 +46,11 @@ class RoleService
 
     function delete($id)
     {
-        $role = $this->find($id);
-        return $role->delete();
+        $role = Role::findById($id);
+        if ($role) {
+            $role->delete();
+        } else {
+            abort(404);
+        }
     }
 }

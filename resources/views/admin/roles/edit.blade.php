@@ -30,7 +30,7 @@
                     </ul>
                     <!--end::Breadcrumb-->
                 </div>
-                <a href="{{ route('admin.categories.index') }}" class="btn btn-primary">Back</a>
+                <a href="{{ route('admin.roles.create') }}" class="btn btn-primary">Back</a>
             </div>
             <!--end::Toolbar container-->
             {{-- component alert --}}
@@ -44,17 +44,41 @@
                         {{-- content --}}
                         <form method="POST" id="form_update_role" action="{{ route('admin.roles.update', $role->id) }}">
                             <div class="row">
-                                <div class="mb-3 col-md-6">
-                                    <label for="name" class="form-label"> Name </label>
-                                    <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="name " value="{{ $role->name }}">
+                                <div class="col-md-5">
+                                    <div class="mb-3 col-md-12">
+                                        <label for="name" class="form-label"> Name </label>
+                                        <input type="text" class="form-control" name="name" id="name"
+                                            placeholder="name " value="{{ $role->name }}">
+                                    </div>
+
+                                    <div class="mb-3 col-md-12">
+                                        <label for="desc" class="form-label"> Desc </label>
+                                        <input type="text" class="form-control" name="guard_name" id="guard_name"
+                                            placeholder="desc" value="{{ $role->guard_name }}">
+                                    </div>
+
+                                    <div class="mb-3 col-md-12">
+                                        <select class="form-select" multiple aria-label="multiple select example"
+                                            name="permission_id[]">
+                                            @foreach ($permissions as $permission)
+                                                <option @if (in_array($permission->id, $permission_ids)) selected @endif
+                                                    value="{{ $permission->id }}">{{ $permission->name }}</option>
+                                            @endforeach
+
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="mb-3 col-md-6">
-                                    <label for="desc" class="form-label"> Desc </label>
-                                    <input type="text" class="form-control" name="guard_name" id="desc"
-                                        placeholder="desc " value="{{ $role->guard_name }}">
+                                {{-- data --}}
+
+                                <div class="col-md-7 table-responsive" style="border-left:1px solid rgb(74, 63, 49)">
+                                    {{-- //data --}}
+                                    <x-admin.table-role />
+
                                 </div>
                             </div>
+
+
+
 
                             <div class="input-group mb-3 mt-3">
                                 <button type="submit" class="btn btn-primary">Thêm</button>
@@ -95,7 +119,7 @@
                                 timer: 2000
                             })
                             .then((result) => {
-                                window.location.href = "{{ route('admin.categories.index') }}"
+                                window.location.href = "{{ route('admin.roles.create') }}"
                             })
                     } else {
                         Swal.fire({
@@ -122,5 +146,11 @@
         })
     </script>
 
-    <x-admin.create-slug />
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+
+            });
+        });
+    </script>
 @endsection

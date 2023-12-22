@@ -54,7 +54,17 @@
                                     <div class="mb-3 col-md-12">
                                         <label for="desc" class="form-label"> Desc </label>
                                         <input type="text" class="form-control" name="guard_name" id="guard_name"
-                                            placeholder="desc ">
+                                            placeholder="desc">
+                                    </div>
+                                    <div class="mb-3 col-md-12">
+                                        <label for="permission_id" class="form-label"> Permissions </label>
+                                        <select class="form-select" multiple aria-label="multiple select example"
+                                            name="permission_id[]">
+                                            @foreach ($permissions as $permission)
+                                                <option value="{{ $permission->id }}">{{ $permission->name }}</option>
+                                            @endforeach
+
+                                        </select>
                                     </div>
                                 </div>
                                 {{-- data --}}

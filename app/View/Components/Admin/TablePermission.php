@@ -5,16 +5,17 @@ namespace App\View\Components\Admin;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
-use App\Services\Admin\RoleService;
-use App\Http\Resources\RoleResource;
+use App\Services\Admin\PermissionService;
+use App\Http\Resources\PermissionResource;
+
 class TablePermission extends Component
 {
     /**
      * Create a new component instance.
-     */ protected $roleService;
-    function __construct(RoleService $roleService)
+     */ protected $permissionService;
+    function __construct(PermissionService $permissionService)
     {
-        $this->roleService = $roleService;
+        $this->permissionService = $permissionService;
     }
 
     /**
@@ -22,6 +23,7 @@ class TablePermission extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.admin.table-permission');
+        $permissions  = PermissionResource::collection($this->permissionService->getAll());
+        return view('components.admin.table-permission', compact('permissions'));
     }
 }

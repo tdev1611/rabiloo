@@ -4,9 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\Admin\RoleService;
+use App\Services\Admin\UserService;
 
 class UserController extends Controller
 {
+    protected $roleService;
+    protected $user;
+    function __construct(RoleService $roleService, UserService $user)
+    {
+        $this->roleService = $roleService;
+        $this->user = $user;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -20,7 +29,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles  =  $this->roleService->getAll();
+        return view('admin.users.create',compact('roles'));
     }
 
     /**

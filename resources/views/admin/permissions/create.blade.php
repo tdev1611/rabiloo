@@ -42,7 +42,7 @@
                 <div class="row">
                     <div class="col-12 ">
                         {{-- content --}}
-                        <form method="POST" id="form_add_role" action="{{ route('admin.roles.store') }}">
+                        <form method="POST" id="form_add_role" action="{{ route('admin.permissions.store') }}">
                             <div class="row">
                                 <div class="col-md-5">
                                     <div class="mb-3 col-md-12">

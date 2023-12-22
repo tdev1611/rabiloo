@@ -18,18 +18,18 @@
                 <td>{{ $permission->name }}</td>
                 <td>{{ $permission->guard_name }}</td>
                 <td>
-                    <a href="{{ route('admin.permission.edit', $role->id) }}" title="Sửa {{ $role->name }}">Sửa</a> /
-                    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $role->id }}"
-                        title="Xóa {{ $role->name }}">Xóa</a>
+                    <a href="{{ route('admin.permissions.edit', $permission->id) }}" title="Sửa {{ $permission->name }}">Sửa</a> /
+                    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ $permission->id }}"
+                        title="Xóa {{ $permission->name }}">Xóa</a>
                 </td>
             </tr>
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal-{{ $role->id }}" tabindex="-1"
+            <div class="modal fade" id="exampleModal-{{ $permission->id }}" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa vài trò {{ $role->name }} </h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa vài trò {{ $permission->name }} </h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Close"></button>
                         </div>
@@ -38,7 +38,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a class="btn btn-primary" href="{{ route('admin.permission.delete', $role->id) }}">Xóa</a>
+                            <a class="btn btn-primary" href="{{ route('admin.permissions.delete', $permission->id) }}">Xóa</a>
                         </div>
                     </div>
                 </div>

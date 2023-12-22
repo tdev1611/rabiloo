@@ -41,7 +41,16 @@
             <!--begin:Menu sub-->
             <div class="menu-sub menu-sub-accordion">
 
-
+                <div class="menu-item">
+                    <!--begin:Menu link-->
+                    <a class="menu-link" href="{{ route('admin.users.create') }}">
+                        <span class="menu-bullet">
+                            <span class="bullet bullet-dot"></span>
+                        </span>
+                        <span class="menu-title">Thêm thành viên</span>
+                    </a>
+                    <!--end:Menu link-->
+                </div>
                 <!--begin:Menu item-->
                 <div class="menu-item">
                     <!--begin:Menu link-->
@@ -91,22 +100,13 @@
                 </div>
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="{{ route('admin.roles.index') }}">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Danh sách vai trò</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
+
                 <!--end:Menu item-->
             </div>
             <!--end:Menu sub-->
         </div>
         {{-- end role --}}
-        
+
         {{-- permission --}}
         <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
             <!--begin:Menu link-->
@@ -133,22 +133,13 @@
                         <span class="menu-bullet">
                             <span class="bullet bullet-dot"></span>
                         </span>
-                        <span class="menu-title">Thêm vai trò</span>
+                        <span class="menu-title">Thêm quyền</span>
                     </a>
                     <!--end:Menu link-->
                 </div>
                 <!--end:Menu item-->
                 <!--begin:Menu item-->
-                <div class="menu-item">
-                    <!--begin:Menu link-->
-                    <a class="menu-link" href="{{ route('admin.permissions.index') }}">
-                        <span class="menu-bullet">
-                            <span class="bullet bullet-dot"></span>
-                        </span>
-                        <span class="menu-title">Danh sách quyền</span>
-                    </a>
-                    <!--end:Menu link-->
-                </div>
+
                 <!--end:Menu item-->
             </div>
             <!--end:Menu sub-->

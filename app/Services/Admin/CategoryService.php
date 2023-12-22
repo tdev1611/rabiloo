@@ -3,7 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Models\Category;
-
+use App\Http\Resources\CategoryResource;
 
 class CategoryService
 {
@@ -15,7 +15,7 @@ class CategoryService
 
     function getAll()
     {
-        return $this->category->oldest('title')->get();
+        return  CategoryResource::collection($this->category->oldest('title')->get());
     }
 
     // get status ==1
@@ -30,13 +30,20 @@ class CategoryService
         if ($category === null) {
             abort(404);
         }
-        return $category;
+        return  $category;
     }
 
     function store($data)
     {
         return $this->category->create($data);
     }
+
+    public function categoryById($id)
+    {
+        $category = $this->find($id);
+        return new CategoryResource($category);
+    }
+
 
     function update($id, $data)
     {

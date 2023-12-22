@@ -29,9 +29,9 @@ class RoleRequest extends FormRequest
             ],
             'guard_name' => [
                 'required', 'string',
-                Rule::unique('roles')->ignore($this->route('role'), 'id'),
+                // Rule::unique('roles')->ignore($this->route('role'), 'id'),
             ],
-
+            
         ];
         return $rule;
     }
