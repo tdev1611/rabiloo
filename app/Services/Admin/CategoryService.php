@@ -18,6 +18,7 @@ class CategoryService
         return  CategoryResource::collection($this->category->oldest('title')->get());
     }
 
+
     // get status ==1
     function getcategoryActive()
     {

@@ -9,7 +9,7 @@
                 <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
                     <!--begin::Title-->
                     <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
-                        Thành viên</h1>
+                        Categories</h1>
                     <!--end::Title-->
                     <!--begin::Breadcrumb-->
                     <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -44,52 +44,6 @@
                         <div class="card">
                             <form action="" method="POST" id="actionForm">
                                 @csrf
-                                <!-- Modal -->
-                                {{-- <div class="modal fade" id="staticBackdropAction" data-bs-backdrop="static"
-                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title text-center" id="staticBackdropLabel">Modal title
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <label for="myselect">
-                                                            Trạng thái thành viên
-                                                        </label>
-                                                        <select class="form-control mr-1 " name="status" id="status">
-                                                            <option value="">Chọn</option>
-                                                            <option value="1"> Hoạt động
-                                                            </option>
-                                                            <option value="2"> Vô hiệu hóa
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4" style="margin-top:20px">
-                                                    <div class="form-check ">
-                                                        <input class="form-check-input" type="checkbox" name="delete_users"
-                                                            id="delete_users">
-                                                        <label class="form-check-label" for="delete_users">
-                                                            Xóa thành viên
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Thực hiện</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
-
                                 <div class="card-body">
                                     {{-- <div class="text-end">
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -97,62 +51,54 @@
                                             Thực hiện
                                         </button>
                                     </div> --}}
-                                    <h4 class="card-title">Danh sách thành viên</h4>
+                                    <h4 class="card-title">List posts </h4>
                                     <div class="table-responsive">
                                         <table id="myTable"
                                             class="table table-hover table-row-dashed table-row-gray-300 gy-7 table-striped">
                                             <thead>
                                                 <tr class="fw-bold fs-6 text-gray-800 px-7">
-                                                    {{-- <th scope="col">
-                                                        <input type="checkbox" name="check_all" id="">
-                                                    </th> --}}
                                                     <th>#</th>
-                                                    <th>Tên</th>
-                                                    <th>Email</th>
-                                                    <th>Vai trò</th>
+                                                    <th>Title</th>
+                                                    <th>Slug</th>
+                                                    <th>Status</th>
+                                                    <th>Create_at</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($users as $user)
-                                                    <tr>
-                                                        {{-- <th scope="col">
-                                                            <input type="checkbox" name="list_check[]"
-                                                                value="{{ $user->id }}">
-                                                        </th> --}}
-                                                        <td>{{ $user->id }}</td>
-                                                        <td>{{ $user->name }}</td>
-                                                        <td>{{ $user->email }}</td>
-                                                        <td>
-                                                            @if ($user->roles == 'user')
-                                                                {{ $user->roles }}
-                                                            @else
-                                                                @foreach ($user->roles as $role)
-                                                                    <span>
-                                                                        {{ $role->name }}
-                                                                    </span>
-                                                                @endforeach
-                                                            @endif
-                                                        </td>
 
+                                                @php
+                                                    $temp = 1;
+                                                @endphp
+                                                @foreach ($posts as $post)
+                                                    <tr>
+                                                        <td>{{ $temp++ }}</td>
+                                                        <td>
+                                                            {{ $post->title }}
+                                                        </td>
+                                                        <td>{{ $post->slug }}</td>
+                                                        <td>
+                                                            {!! $post->status !!}
+                                                        </td>
+                                                        <td>{{ $post->created_at }}</td>
                                                         <td class="">
                                                             <div class="d-flex" style=" justify-content: space-around;">
-                                                                <span style="margin-right:6px" class="badge bg-primary ">
-                                                                    <a href="{{ route('admin.users.edit', $user->id) }}"
+                                                                <span style="" class="badge bg-primary ">
+                                                                    <a href="{{ route('admin.categories.edit', $post->id) }}"
                                                                         style="color:#fff">Sửa</a>
                                                                 </span>
-
-                                                                <span class="badge bg-danger delete_user">
-                                                                    <a href="#" data-bs-toggle="modal"
-                                                                        data-bs-target="#staticBackdrop-{{ $user->id }}"
-                                                                        style="color: #fff">Xóa</a>
+                                                                <span class="badge bg-danger delete_post">
+                                                                    <a href="{{ route('admin.categories.delete', $post->id) }}"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#staticBackdrop-{{ $post->id }}"
+                                                                        style="color:#fff">Xóa </a>
                                                                 </span>
                                                             </div>
                                                         </td>
                                                     </tr>
+                                                    <!-- Modal -->
 
-
-                                                    <div class="modal fade" id="staticBackdrop-{{ $user->id }}"
+                                                    <div class="modal fade" id="staticBackdrop-{{ $post->id }}"
                                                         data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                                                         aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                         <div class="modal-dialog">
@@ -160,8 +106,8 @@
                                                                 <div class="modal-header">
                                                                     <h5 class="modal-title" id="staticBackdropLabel">
                                                                         Delete
-                                                                        Category
-                                                                        <b>{{ $user->email }}</b>
+                                                                        post
+                                                                        <b>{{ $post->title }}</b>
                                                                     </h5>
                                                                     <button type="button" class="btn-close"
                                                                         data-bs-toggle="modal" data-bs-dismiss="modal"
@@ -173,13 +119,19 @@
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary"
                                                                         data-bs-dismiss="modal">No</button>
-                                                                    <a href="{{ route('admin.users.delete', $user->id) }}"
+                                                                    <a href="{{ route('admin.categories.delete', $post->id) }}"
                                                                         type="button" class="btn btn-danger">Yes</a>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    {{-- <x.admin.post-modal :post="$post"
+                                                        :deleteRoute="{{ route('admin.categories.delete', $post->id) }}"
+                                                        :modelType="'post'" /> --}}
                                                 @endforeach
+
+
 
 
                                             </tbody>

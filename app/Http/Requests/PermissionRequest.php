@@ -31,8 +31,7 @@ class PermissionRequest extends FormRequest
                 'required', 'string',
                 // Rule::unique('permissions')->ignore($this->route('permission'), 'id'),
             ],
-            'permission_id' => 'array',
-            'permission_id.*' => 'exists:permissions,id',
+          
         ];
         return $rule;
     }

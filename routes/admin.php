@@ -1,10 +1,11 @@
 <?php
-
-use App\Http\Controllers\Admin\CategoryController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PostController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,10 @@ Route::group(['prefix' => 'admin-dashboard'], function () {
     //categories
     Route::resource('categories', CategoryController::class, ['as' => 'admin']);
     Route::get('categories/delete/{id}', [CategoryController::class, 'delete'])->name('admin.categories.delete');
+
+    //posts
+    Route::resource('posts', PostController::class, ['as' => 'admin']);
+    Route::get('posts/delete/{id}', [PostController::class, 'delete'])->name('admin.posts.delete');
+
+
 });

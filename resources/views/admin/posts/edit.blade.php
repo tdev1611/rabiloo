@@ -42,39 +42,42 @@
                 <div class="row">
                     <div class="col-12 ">
                         {{-- content --}}
-                        <form method="POST" id="form_add_user" action="{{ route('admin.users.update', $user->id) }}">
+                        <form method="POST" id="form_update_category"
+                            action="{{ route('admin.categories.update', $category->id) }}">
                             <div class="row">
-                                <div class="mb-3 col-md-6">
-                                    <label for="name" class="form-label"> name </label>
-                                    <input type="text" class="form-control" name="name" id="name"
-                                        placeholder="name " value="{{ $user->name }}">
+                                <div class="mb-3 col-md-5">
+                                    <label for="title" class="form-label"> Title </label>
+                                    <input type="text" class="form-control" name="title" id="title"
+                                        placeholder="title " value="{{ old('name', $category->title) }}">
                                 </div>
-                                <div class="mb-3 col-md-6">
-                                    <label for="email" class="form-label"> email </label>
-                                    <input type="text" class="form-control" name="email" id="email"
-                                        placeholder="email " value="{{ $user->email }}">
-                                </div>
-                                <div class="mb-3 col-md-6">
-                                    <label for="password" class="form-label"> password </label>
-                                    <input type="password" class="form-control" name="password" id="password"
-                                        placeholder="password " value="defautl">
-                                </div>
-                                <div class="mb-3 col-md-6">
-                                    <label for="role_id" class="form-label"> Roles </label>
-                                    <select class="form-select" multiple aria-label="multiple select example"
-                                        name="role_id[]">
-                                        @foreach ($roles as $role)
-                                            <option @if (in_array($role->id, $role_ids)) selected @endif
-                                                value="{{ $role->id }}">{{ $role->name }}</option>
-                                        @endforeach
-                                    </select>
+
+                                <div class="mb-3 col-md-5">
+                                    <label for="slug" class="form-label"> Slug </label>
+                                    <input type="text" class="form-control" name="slug" id="slug"
+                                        placeholder="slug " value="{{ old('slug', $category->slug) }}">
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <div class="mb-3 col-md-10">
+                                    <label for="status" class="form-label">Trạng thái </label>
+                                    <select class="form-select form-select-lg mb-3" aria-label="Large select example"
+                                        name="status" id="status">
+                                        <option value="1" {{ old('status') == 1 ? 'selected' : '' }}
+                                            @if ($category->status == 1) selected @endif>
+                                            Hiển thị
+                                        </option>
+                                        <option value="2" {{ old('status') == 2 ? 'selected' : '' }}
+                                            @if ($category->status == 2) selected @endif>
+                                            Ẩn
+                                        </option>
+                                    </select>
 
+                                </div>
+                            </div>
 
                             <div class="input-group mb-3 mt-3">
-                                <button type="submit" class="btn btn-primary">Thêm</button>
+                                <button type="submit" class="btn btn-primary">Edit</button>
                             </div>
                         </form>
                     </div>
@@ -89,7 +92,7 @@
 
 @section('js')
     <script>
-        $('#form_add_user').submit(function(e) {
+        $('#form_update_category').submit(function(e) {
             e.preventDefault();
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
             $.ajaxSetup({
@@ -112,7 +115,7 @@
                                 timer: 2000
                             })
                             .then((result) => {
-                                window.location.href = "{{ route('admin.users.index') }}"
+                                window.location.href = "{{ route('admin.categories.index') }}"
                             })
                     } else {
                         Swal.fire({
@@ -126,7 +129,6 @@
                     }
                 },
                 error: function(error) {
-                    console.log(error);
                     Swal.fire({
                         icon: 'error',
                         title: error.responseJSON.message,

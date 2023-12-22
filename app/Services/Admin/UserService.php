@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin;
 
-use App\Http\Resources\userResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 
 
@@ -16,7 +16,7 @@ class UserService
 
     function getAll()
     {
-        return  UserResource::collection($this->user->oldest('name')->get());
+        return UserResource::collection($this->user->oldest('name')->with('roles')->get());
     }
 
     function find($id)
@@ -33,24 +33,25 @@ class UserService
         return $this->user->create($data);
     }
 
-    function getuserById($id)
+    function getUserById($id)
     {
-        return  new userResource($this->find($id));
+        return new UserResource($this->find($id));
     }
     function update($id, $data)
     {
         $user = $this->find($id);
+        $password = request()->input('password');
+        $data['password'] = ($password != 'default') ? $password : $user->password;
+
         $user->update($data);
         return $user;
     }
 
+
+
     function delete($id)
     {
-        $user = user::findById($id);
-        if ($user) {
-            $user->delete();
-        } else {
-            abort(404);
-        }
+        $user = $this->find($id);
+        $user->delete();
     }
 }
