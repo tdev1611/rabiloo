@@ -4,7 +4,8 @@ namespace App\Services\Admin;
 
 use App\Models\Post;
 use App\Http\Resources\PostResource;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 class PostService
 {
     private $post;
@@ -15,16 +16,26 @@ class PostService
 
     function getAll()
     {
-        return  PostResource::collection($this->post->oldest('title')->with('category')->get());
+        $posts =  PostResource::collection($this->post->oldest('id')->with('category')->get());
+        if (request()->status == 'disabled') {
+            $posts = $this->getPostsOnlyTrash();
+        }
+        return $posts;
     }
  
+    function getPostsOnlyTrash()
+    {
+        $posts = PostResource::collection($this->post->onlyTrashed()
+            ->oldest('title')->get());
+        return $posts;
 
+    }
 
     function find($id)
     {
         $post = $this->post->find($id);
-        if ($post === null) {
-            abort(404);
+        if (!$post) {
+            throw new ModelNotFoundException('not found by ID ' );
         }
         return  $post;
     }
@@ -47,6 +58,20 @@ class PostService
         return new PostResource($post);
     }
 
+    // update
+
+    function handleUpdateImg($id, $newImage, $slug)
+    {
+        if (!empty($newImage)) {
+            $img_old = $this->find($id)->image;
+            Storage::delete($img_old);
+        }
+        $fileName = $slug . '-' . time() . '.' . strtolower($newImage->getClientOriginalExtension());
+        $path = $newImage->storeAs('public/posts', $fileName);
+        return "public/posts/" . $fileName;
+
+    }
+
 
     function update($id, $data)
     {
@@ -60,4 +85,33 @@ class PostService
         $post = $this->find($id);
         return $post->delete();
     }
+
+    function findOnlyTrash($id)
+    {
+        $post = $this->post->onlyTrashed()->find($id)  ;
+        if (!$post) {
+            throw new ModelNotFoundException('not found ID '  );
+        }
+        return $post;
+    }
+
+    function restore($id)
+    {
+        $post = $this->findOnlyTrash($id);
+        $category = $post->category;
+        if($category->deleted_at !== null) {
+            throw new ModelNotFoundException('Category not found ' );
+        }
+        return $post->restore();
+    }
+
+    function forceDelete($id)
+    {
+        $post = $this->findOnlyTrash($id);
+        Storage::delete($post->image);
+        return $post->forceDelete();
+    }
+
+
+
 }

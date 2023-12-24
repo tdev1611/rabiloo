@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->unique();
             $table->string('slug')->unique();
-            $table->tinyInteger('status')->comment('1: Hiển thị; 2 : Ẩn');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

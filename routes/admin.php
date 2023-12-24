@@ -1,11 +1,12 @@
 <?php
+
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PostController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,8 @@ Route::group(['prefix' => 'admin-dashboard'], function () {
 
     Route::resource('users', UserController::class, ['as' => 'admin']);
     Route::get('users/delete/{id}', [UserController::class, 'delete'])->name('admin.users.delete');
+    Route::get('users/restore/{id}', [UserController::class, 'restore'])->name('admin.users.restore');
+    Route::get('users/forceDelete/{id}', [UserController::class, 'forceDelete'])->name('admin.users.forceDelete');
 
     //role
     Route::resource('roles', RoleController::class, ['as' => 'admin']);
@@ -38,10 +41,14 @@ Route::group(['prefix' => 'admin-dashboard'], function () {
     //categories
     Route::resource('categories', CategoryController::class, ['as' => 'admin']);
     Route::get('categories/delete/{id}', [CategoryController::class, 'delete'])->name('admin.categories.delete');
+    Route::get('categories/restore/{id}', [CategoryController::class, 'restore'])->name('admin.categories.restore');
+    Route::get('categories/forceDelete/{id}', [CategoryController::class, 'forceDelete'])->name('admin.categories.forceDelete');
+    // Route::post('categories/action', [CategoryController::class, 'action'])->name('admin.categories.action');
 
-    //posts
-    Route::resource('posts', PostController::class, ['as' => 'admin']);
-    Route::get('posts/delete/{id}', [PostController::class, 'delete'])->name('admin.posts.delete');
 
-
+     //posts
+     Route::resource('posts', PostController::class, ['as' => 'admin']);
+     Route::get('posts/delete/{id}', [PostController::class, 'delete'])->name('admin.posts.delete');
+     Route::get('posts/restore/{id}', [PostController::class, 'restore'])->name('admin.posts.restore');
+     Route::get('posts/forceDelete/{id}', [PostController::class, 'forceDelete'])->name('admin.posts.forceDelete');
 });

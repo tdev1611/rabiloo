@@ -1,17 +1,17 @@
 <?php
 
 namespace App\Observers;
-
+use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 use App\Models\Category;
-
-class CategoryObserver
+use App\Models\Post;
+class CategoryObserver implements ShouldHandleEventsAfterCommit
 {
     /**
      * Handle the Category "created" event.
      */
     public function created(Category $category): void
     {
-        //
+     
     }
 
     /**
@@ -27,7 +27,9 @@ class CategoryObserver
      */
     public function deleted(Category $category): void
     {
-        //
+        $post_ids = $category->posts->pluck('id')->toArray();
+
+        $deleted = Post::whereIn('id', $post_ids)->delete();
     }
 
     /**
@@ -35,7 +37,7 @@ class CategoryObserver
      */
     public function restored(Category $category): void
     {
-        //
+        $category->posts()->restore();
     }
 
     /**
@@ -43,6 +45,9 @@ class CategoryObserver
      */
     public function forceDeleted(Category $category): void
     {
-        //
+        $posts = $category->posts;
+        foreach ($posts as $post) {
+            $post->forceDeleted();
+        }
     }
 }

@@ -4,7 +4,7 @@ namespace App\Services\Admin;
 
 use App\Models\Category;
 use App\Http\Resources\CategoryResource;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 class CategoryService
 {
     private $category;
@@ -15,9 +15,21 @@ class CategoryService
 
     function getAll()
     {
-        return  CategoryResource::collection($this->category->oldest('title')->get());
+        $categories = CategoryResource::collection($this->category->oldest('title')->get());
+
+        if (request()->status == 'disabled') {
+            $categories = $this->getCategoryOnlyTrash();
+        }
+        return $categories;
     }
 
+    function getCategoryOnlyTrash()
+    {
+        $categories = CategoryResource::collection($this->category->onlyTrashed()
+            ->oldest('title')->get());
+        return $categories;
+
+    }
 
     // get status ==1
     function getcategoryActive()
@@ -28,10 +40,10 @@ class CategoryService
     function find($id)
     {
         $category = $this->category->find($id);
-        if ($category === null) {
-            abort(404);
-        }
-        return  $category;
+        if (!$category) {
+            throw new ModelNotFoundException('not found  ID ');
+            }
+        return $category;
     }
 
     function store($data)
@@ -58,4 +70,27 @@ class CategoryService
         $category = $this->find($id);
         return $category->delete();
     }
+
+
+    function findOnlyTrash($id)
+    {
+        $category = $this->category->onlyTrashed()->find($id);
+        if (!$category) {
+            throw new ModelNotFoundException('not found ID '  );
+        }
+        return $category;
+    }
+
+    function restore($id)
+    {
+        $category = $this->findOnlyTrash($id);
+        return $category->restore();
+    }
+
+    function forceDelete($id)
+    {
+        $category = $this->findOnlyTrash($id);
+        return $category->forceDelete();
+    }
+
 }

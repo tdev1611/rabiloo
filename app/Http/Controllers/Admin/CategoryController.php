@@ -9,18 +9,18 @@ use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
-
-    protected $categoryService;
-    function __construct(CategoryService $categoryService)
+    protected $category;
+    function __construct(CategoryService $category)
     {
-        $this->categoryService = $categoryService;
+        $this->category = $category;
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = $this->categoryService->getAll();
+        $categories = $this->category->getAll();
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -40,7 +40,7 @@ class CategoryController extends Controller
         try {
             $data = $request->validated();
             // store
-            $this->categoryService->store($data);
+            $this->category->store($data);
 
             $response = [
                 'success' => true,
@@ -69,7 +69,7 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $category = $this->categoryService->categoryById($id);
+        $category = $this->category->categoryById($id);
         return view('admin.categories.edit', compact('category'));
     }
 
@@ -78,9 +78,9 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, string $id)
     {
-        $data =  $request->validated();
+        $data = $request->validated();
         try {
-            $this->categoryService->update($id, $data);
+            $this->category->update($id, $data);
 
             $response = [
                 'success' => true,
@@ -101,10 +101,31 @@ class CategoryController extends Controller
     function delete($id)
     {
         try {
-            $this->categoryService->delete($id);
+            $this->category->delete($id);
             return back()->with('success', 'Successfully deleted');
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
         }
     }
+
+    function restore($id)
+    {
+        try {
+            $this->category->restore($id);
+            return redirect()->back()->with('success', 'Restored  Success ');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+    function forceDelete($id)
+    {
+        try {
+            $this->category->forceDelete($id);
+            return redirect()->back()->with('success', 'forceDeleted  Success ');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+
 }

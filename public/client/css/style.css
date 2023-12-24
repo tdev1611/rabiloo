@@ -1,0 +1,51 @@
+/* header -navbar */
+
+
+
+
+
+
+
+#wp-content {
+    min-height: 800px;
+}
+
+
+.item {
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    margin: 10px;
+    position: relative;
+}
+
+/* Ẩn thẻ a ban đầu */
+.item #detail a {
+    display: none;
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#name-movie {
+    margin-top: 25px;
+
+}
+
+#name-movie span {
+    font-size: 19px;
+}
+
+.item:hover a {
+    display: block;
+}
+
+
+
+/* footer */
+.footer {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    text-align: center;
+}

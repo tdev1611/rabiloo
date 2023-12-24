@@ -36,6 +36,10 @@ class PostRequest extends FormRequest
             'image' => 'required|mimes:jpeg,jpg,png,gif|max:5000',
             'category_id' => 'required|exists:categories,id',
         ];
+        if (request()->isMethod('post')) {
+            return $rule;
+        }
+        $rule['image'] = ['nullable' ,'mimes:jpeg,jpg,png,gif|max:5000'] ;
         return $rule;
     }
 }

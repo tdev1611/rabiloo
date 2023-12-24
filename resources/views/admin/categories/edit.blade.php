@@ -58,23 +58,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="mb-3 col-md-10">
-                                    <label for="status" class="form-label">Trạng thái </label>
-                                    <select class="form-select form-select-lg mb-3" aria-label="Large select example"
-                                        name="status" id="status">
-                                        <option value="1" {{ old('status') == 1 ? 'selected' : '' }}
-                                            @if ($category->status == 1) selected @endif>
-                                            Hiển thị
-                                        </option>
-                                        <option value="2" {{ old('status') == 2 ? 'selected' : '' }}
-                                            @if ($category->status == 2) selected @endif>
-                                            Ẩn
-                                        </option>
-                                    </select>
-
-                                </div>
-                            </div>
+                            
 
                             <div class="input-group mb-3 mt-3">
                                 <button type="submit" class="btn btn-primary">Edit</button>

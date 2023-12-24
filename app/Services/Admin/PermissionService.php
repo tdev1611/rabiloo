@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use Spatie\Permission\Models\Permission;
 
 use App\Http\Resources\PermissionResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PermissionService
 {
@@ -24,10 +25,10 @@ class PermissionService
     function find($id)
     {
         $permission = $this->permission->find($id);
-        if ($permission === null) {
-            abort(404);
+        if (!$permission) {
+            throw new ModelNotFoundException('not found by ID ' );
         }
-        return $permission;
+        return  $permission;
     }
 
 

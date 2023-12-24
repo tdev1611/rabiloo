@@ -4,6 +4,7 @@ namespace App\Services\Admin;
 
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
 class UserService
@@ -22,9 +23,9 @@ class UserService
     function find($id)
     {
         $user = $this->user->find($id);
-        if ($user === null) {
-            abort(404);
-        }
+        if (!$user) {
+            throw new ModelNotFoundException('not found  ID ' );
+            }
         return $user;
     }
 
@@ -47,11 +48,30 @@ class UserService
         return $user;
     }
 
-
-
     function delete($id)
     {
         $user = $this->find($id);
         $user->delete();
     }
+    function findOnlyTrash($id)
+    {
+        $user = $this->user->onlyTrashed()->find($id);
+        if (!$user) {
+            throw new ModelNotFoundException('not found  ID ' );
+            }
+        return $user;
+    }
+
+    function restore($id)
+    {
+        $user = $this->findOnlyTrash($id);
+        return $user->restore();
+    }
+
+    function forceDelete($id)
+    {
+        $user = $this->findOnlyTrash($id);
+        return $user->forceDelete();
+    }
+
 }

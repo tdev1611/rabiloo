@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\Admin\PostService;
 use App\Services\Admin\CategoryService;
 use App\Http\Requests\PostRequest;
-use App\Models\Post;
+
 
 class PostController extends Controller
 {
@@ -23,7 +23,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->postService->getAll();
+           $posts = $this->postService->getAll();
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -32,6 +32,7 @@ class PostController extends Controller
      */
     public function create()
     {
+
         $categories = $this->categoryService->getAll();
         return view('admin.posts.create', compact('categories'));
     }
@@ -41,7 +42,7 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $data  = $request->validated();
+        $data = $request->validated();
         try {
             $data['user_id'] = 1;
             // handle uploadImg
@@ -62,7 +63,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        abort(404);
     }
 
     /**
@@ -70,22 +71,64 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $categories = $this->categoryService->getAll();
+        $post = $this->postService->postById($id);
+        return view('admin.posts.edit', compact('categories', 'post'));
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PostRequest $request, string $id)
     {
-        //
+        $data = $request->validated();
+        try {
+            $data['user_id'] = 1;
+            //  handleUpdateImg
+            $request->hasFile('image') ? $data['image'] = $this->postService
+                ->handleUpdateImg($id, $request->file('image'), $request->slug) : null;
+
+            // update
+            $this->postService->update($id, $data);
+            return back()->with('success', 'Thêm Thành Công');
+        } catch (\Exception $e) {
+
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+
+
+    function delete($id)
     {
-        //
+        try {
+            $this->postService->delete($id);
+            return back()->with('success', 'Successfully deleted');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    function restore($id)
+    {
+        try {
+            $this->postService->restore($id);
+            return redirect()->back()->with('success', 'Restored  Success ');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+    function forceDelete($id)
+    {
+        try {
+            $this->postService->forceDelete($id);
+            return redirect()->back()->with('success', 'forceDeleted  Success ');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

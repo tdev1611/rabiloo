@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Post;
-
+use Illuminate\Support\Facades\Log;
 class PublishScheduledPosts extends Command
 {
 
@@ -31,9 +31,15 @@ class PublishScheduledPosts extends Command
         $post = new Post;
         $scheduledPosts = $post->getScheduledPosts();
 
-        foreach ($scheduledPosts as $scheduledPost) {
-            $scheduledPost->update(['is_published' => 2]);
-        }
-        $this->info('posts successfully.');
+         // $message = ' loggin';
+         Log::info($scheduledPosts);
+
+         foreach ($scheduledPosts as $scheduledPost) {
+             $scheduledPost->is_published = 2;
+             $scheduledPost->save();
+ 
+             // $message1 = ' loggin123123123123';
+             // Log::info($message1);
+         }
     }
 }

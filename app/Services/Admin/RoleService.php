@@ -4,7 +4,7 @@ namespace App\Services\Admin;
 
 use App\Http\Resources\RoleResource;
 use Spatie\Permission\Models\Role;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoleService
 {
@@ -21,9 +21,9 @@ class RoleService
 
     function find($id)
     {
-        $role = $this->role->find($id);
+        $role = $this->role->findOrFail($id);
         if ($role === null) {
-            abort(404);
+            throw new ModelNotFoundException('not found  ID ' );
         }
         return $role;
     }

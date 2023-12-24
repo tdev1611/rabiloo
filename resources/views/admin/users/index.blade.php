@@ -42,8 +42,20 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <form action="" method="POST" id="actionForm">
+                            <form action="" method="user" id="actionForm">
                                 @csrf
+                                <div style=" margin: 030px 0 0 30px;">
+
+                                    <a href="{{ route('admin.users.index') }}" class="btn btn-primary  my-3">
+                                        Active
+                                    </a>
+                                    <a href="{{ request()->fullUrlwithQuery(['status' => 'disabled']) }}"
+                                        class="btn btn-danger my-3">
+                                        Trash <i class="fas fa-trash"></i>
+                                        <span>()</span>
+                                    </a>
+                                </div>
+
                                 <!-- Modal -->
                                 {{-- <div class="modal fade" id="staticBackdropAction" data-bs-backdrop="static"
                                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
@@ -135,20 +147,37 @@
                                                             @endif
                                                         </td>
 
-                                                        <td class="">
-                                                            <div class="d-flex" style=" justify-content: space-around;">
-                                                                <span style="margin-right:6px" class="badge bg-primary ">
-                                                                    <a href="{{ route('admin.users.edit', $user->id) }}"
-                                                                        style="color:#fff">Sửa</a>
-                                                                </span>
-
-                                                                <span class="badge bg-danger delete_user">
-                                                                    <a href="#" data-bs-toggle="modal"
-                                                                        data-bs-target="#staticBackdrop-{{ $user->id }}"
-                                                                        style="color: #fff">Xóa</a>
-                                                                </span>
-                                                            </div>
-                                                        </td>
+                                                        @if (request()->status !== 'disabled')
+                                                            <td class="">
+                                                                <div class="d-flex" style=" justify-content: space-around;">
+                                                                    <span style="" class="badge bg-primary ">
+                                                                        <a href="{{ route('admin.users.edit', $user->id) }}"
+                                                                            style="color:#fff">Sửa</a>
+                                                                    </span>
+                                                                    <span class="badge bg-danger delete_user">
+                                                                        <a href="{{ route('admin.users.delete', $user->id) }}"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#staticBackdrop-{{ $user->id }}"
+                                                                            style="color:#fff">Xóa </a>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                        @else
+                                                            <td class="">
+                                                                <div class="d-flex" style=" justify-content: space-around;">
+                                                                    <span style="" class="badge bg-success ">
+                                                                        <a href="{{ route('admin.users.restore', $user->id) }}"
+                                                                            style="color:#fff">Restore</a>
+                                                                    </span>
+                                                                    <span class="badge bg-dark delete_user">
+                                                                        <a href="{{ route('admin.users.delete', $user->id) }}"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#staticBackdrop-{{ $user->id }}"
+                                                                            style="color:#fff">forceDelete </a>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                        @endif
                                                     </tr>
 
 
@@ -173,8 +202,13 @@
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary"
                                                                         data-bs-dismiss="modal">No</button>
-                                                                    <a href="{{ route('admin.users.delete', $user->id) }}"
-                                                                        type="button" class="btn btn-danger">Yes</a>
+                                                                       @if (request()->status !== 'disabled')
+                                                                        <a href="{{ route('admin.users.delete', $user->id) }}"
+                                                                            type="button" class="btn btn-danger">Yes</a>
+                                                                    @else
+                                                                        <a href="{{ route('admin.users.forceDelete', $user->id) }}"
+                                                                            type="button" class="btn btn-danger">Yes</a>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </div>
