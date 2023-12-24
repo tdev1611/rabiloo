@@ -18,15 +18,15 @@
         <div class="col-md-4">
             <div class="item">
                 <img class="img-fluid"
-                src="https://images.pexels.com/photos/10835697/pexels-photo-10835697.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                alt="">
+                    src="https://images.pexels.com/photos/10835697/pexels-photo-10835697.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                    alt="">
             </div>
 
             <div class="text-center">
 
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                   Like
+                <button type="button" class="btn btn-dark" id="btn_like" data-id="{{ $post->id }}">
+                    Like
                 </button>
 
             </div>
@@ -38,8 +38,8 @@
                     <h3> {{ $post->title }}</h3>
                 </span>
             </div>
-         
-          
+
+
             <div class="post_desc mt-3">
                 <p class="text-bold">
                     Nội dung :
@@ -49,89 +49,165 @@
             </div>
         </div>
 
-        <div class="mb-3 col-md-6">
-            <label for="content" class="form-label"> Bình luận</label>
-            <textarea name="content" id="content" cols="30" rows="5" placeholder="Bình luận" class="form-control"></textarea>
+        <form id="form_comment" action="{{ route('client.comments.store', $post) }}" method="post">
+            @csrf
+            <div class="mb-3 col-md-6">
+                <label for="content" class="form-label"> Bình luận</label>
+                <textarea name="content" id="content" cols="30" rows="5" placeholder="Bình luận" class="form-control"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Bình luận
+            </button>
+        </form>
+
+        <div class="mt-4 " style="border-top:1px solid tan">
+            <div class="container mt-4">
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h4 class="card-title">Nhận xét</h4>
+                    </div>
+                    <div class="card-body">
+                        @foreach ($post->comments as $comment)
+                            <div class="media">
+                                <div class="media-body">
+                                    <h5 class="mt-0">{{ $comment->user->name }}</h5>
+                                    <p>
+                                        {{ $comment->content }}
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                        @endforeach
+
+
+                    </div>
+                </div>
+            </div>
+
         </div>
+
     </div>
 
     <!-- Modal -->
-  
+
 @endsection
 
 
 
 @section('js')
 
-    {{-- change --}}
+
+
 
     <script>
+        // {{-- like --}} 
+
         $(document).ready(function() {
-            $('.qty').change(function() {
-                let qty = $(this).val();
-                let data_id = $(this).attr('data-id');
-                let ticketPrice = $('#ticket_price-' + data_id).val();
-                let newTotal = qty * ticketPrice;
-                $('.ct-total .total-' + data_id).text(newTotal);
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-
-            $(".booking_form").submit(function(e) {
-                event.preventDefault();
-                let formId = $(this).closest('form').data('id');
-
-                let qty = $('#qty-' + formId).val();
-                let slot = $('#slot-' + formId).val();
-                let theater_id = $('#theater_id-' + formId).val();
-                let post_id = $('#post_id-' + formId).val();
-                let ticket_price = $('#ticket_price-' + formId).val();
-
-
-                var csrfToken = $('meta[name="csrf-token"]').attr("content");
+            $('#btn_like').click(function() {
+                let post_id = $(this).attr('data-id');
+                console.log(post_id);
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajaxSetup({
                     headers: {
-                        "X-CSRF-TOKEN": csrfToken,
-                    },
+                        'X-CSRF-TOKEN': csrfToken
+                    }
                 });
                 $.ajax({
-                    type: "POST",
-                    url: $(this).attr("action"),
-                    data: {
-                        theater_id: theater_id,
-                        post_id: post_id,
-                        slot: slot,
-                        ticket_price: ticket_price,
-                        qty: qty,
-                        data_id : formId,
-                        
-                    },
+                    type: 'POST',
+                    url: "{{ route('client.likes.store', ['post' => $post->id]) }}",
+              
                     dataType: "json",
                     success: function(response) {
                         console.log(response);
                         if (response.success == true) {
                             Swal.fire({
-                                icon: "success",
-                                title: response.message,
-                                showConfirmButton: false,
-                                timer: 2000,
-                            }).then((result) => {
-                                location.reload();
-                            });
+                                    icon: 'success',
+                                    title: response.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                })
+                                .then((result) => {
+                                   
+                                })
                         } else {
                             Swal.fire({
-                                icon: "error",
+                                icon: 'error',
                                 title: response.message,
                                 showConfirmButton: false,
-                                timer: 3500,
-                            }).then((result) => {});
+                                timer: 5000
+                            }).then((result) => {
+
+                            })
                         }
+
                     },
+                    error: function(error) {
+                        console.log(error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: error.responseJSON.message,
+                            showConfirmButton: false,
+                            timer: 5000
+                        }).then((result) => {
+
+                        })
+                    }
                 });
+            })
+
+        })
+
+        // {{-- commnet --}}
+        $('#form_comment').submit(function(e) {
+            e.preventDefault();
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                }
             });
-        });
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
+                    if (response.success == true) {
+                        Swal.fire({
+                                icon: 'success',
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 2000
+                            })
+                            .then((result) => {
+                                location.reload();
+                            })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 5000
+                        }).then((result) => {
+
+                        })
+                    }
+
+                },
+                error: function(error) {
+                    console.log(error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: error.responseJSON.message,
+                        showConfirmButton: false,
+                        timer: 5000
+                    }).then((result) => {
+
+                    })
+                }
+            });
+        })
     </script>
 @endsection

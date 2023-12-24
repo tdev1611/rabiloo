@@ -36,24 +36,38 @@
                     <li class="nav-item">
                         <a class="nav-link" href="">Customer Service</a>
                     </li>
-                   
+                    <li class="nav-item">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Các bài viết
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Danh sách bài viết</a></li>
+                                <li><a class="dropdown-item" href="#">Thêm bài viết</a></li>
+                                {{-- <li><hr class="dropdown-divider"></li>
+                              <li><a class="dropdown-item" href="#">Separated link</a></li> --}}
+                            </ul>
+                        </div>
+                    </li>
+
                 </ul>
             </div>
         </nav>
-       
+
     </div>
 
 
-    
- 
 
-    
+
+
+
 
     <div id="wp-content">
-      
+
         <div class="container mt-4">
-           
-           <x-admin.alert-notify />
+
+            <x-admin.alert-notify />
             @yield('content')
         </div>
     </div>
@@ -75,9 +89,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="http://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ url('auth/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-    
+
     <script>
-          $(document).ready(function() {
+        $(document).ready(function() {
             setTimeout(function() {
                 $('#notification').fadeOut('slow');
             }, 3000);

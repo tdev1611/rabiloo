@@ -34,4 +34,20 @@ class Post extends Model
         Storage::delete($post->image);
         return $post->forceDelete();
     }
+
+    // comments
+    function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
+    // likes
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+    // likesCount
+    public function likesCount()
+    {
+        return $this->likes()->count();
+    }
 }

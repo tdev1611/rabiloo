@@ -18,8 +18,8 @@ class PostController extends Controller
     {
 
         try {
-            $post = Post::where('slug', $slug)->where('is_published', 2)->first();
-            if(!$post) {
+            $post = Post::where('slug', $slug)->where('is_published', 2)->with('comments.user')->first();
+            if (!$post) {
                 throw new ModelNotFoundException('Post not found ');
             }
 

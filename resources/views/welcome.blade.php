@@ -20,7 +20,14 @@
 
                     </div>
 
+                    <span class="text-muted" >
+                        Lượt yêu thích :
+                    </span>
+                    <span>
+                        {{ $post->likes_count }}
+                    </span>
                 </div>
+
             </div>
         @endforeach
 

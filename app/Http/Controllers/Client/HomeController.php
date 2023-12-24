@@ -16,7 +16,7 @@ class HomeController extends Controller
 
     function index()
     {
-         $posts = $this->post->where('is_published', 2)->latest()->get();
-        return view('welcome',compact('posts'));
+        $posts = $this->post->where('is_published', 2)->withCount('likes')->latest()->get();
+        return view('welcome', compact('posts'));
     }
 }

@@ -4,6 +4,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\PostController;
+use App\Http\Controllers\Client\CommentController;
+use App\Http\Controllers\Client\LikeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,12 +17,13 @@ use App\Http\Controllers\Client\PostController;
 |
 */
 
- 
+
 
 Route::get('', [HomeController::class, 'index'])->name('home');
 
 
 Route::group(['prefix' => 'posts'], function () {
-    Route::get('/{slug}',[PostController::class, 'show'])->name('client.posts.show');
+    Route::get('/{slug}', [PostController::class, 'show'])->name('client.posts.show');
+    Route::post('/{post}/comments', [CommentController::class, 'store'])->name('client.comments.store');
+    Route::post('/{post}/like', [LikeController::class, 'store'])->name('client.likes.store');
 });
-
