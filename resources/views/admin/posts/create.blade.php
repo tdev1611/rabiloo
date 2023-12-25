@@ -31,7 +31,10 @@
                     </ul>
                     <!--end::Breadcrumb-->
                 </div>
-                <a href="{{ route('admin.posts.index') }}" class="btn btn-primary">Back</a>
+                @role('admin')
+                    <a href="{{ route('admin.posts.index') }}" class="btn btn-primary">Back</a>
+                @endrole
+
             </div>
             <!--end::Toolbar container-->
             {{-- component alert --}}

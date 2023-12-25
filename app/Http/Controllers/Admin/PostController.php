@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\Admin\PostService;
 use App\Services\Admin\CategoryService;
 use App\Http\Requests\PostRequest;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PostController extends Controller
 {
@@ -23,7 +23,7 @@ class PostController extends Controller
      */
     public function index()
     {
-           $posts = $this->postService->getAll();
+        $posts = $this->postService->getAll();
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -71,10 +71,14 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        $categories = $this->categoryService->getAll();
-        $post = $this->postService->postById($id);
-        return view('admin.posts.edit', compact('categories', 'post'));
 
+        try {
+            $categories = $this->categoryService->getAll();
+            $post = $this->postService->postById($id);
+            return view('admin.posts.edit', compact('categories', 'post'));
+        } catch (ModelNotFoundException $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -84,16 +88,14 @@ class PostController extends Controller
     {
         $data = $request->validated();
         try {
-            $data['user_id'] = 1;
+            $data['user_id'] = auth()->user()->id;
             //  handleUpdateImg
             $request->hasFile('image') ? $data['image'] = $this->postService
                 ->handleUpdateImg($id, $request->file('image'), $request->slug) : null;
-
             // update
             $this->postService->update($id, $data);
             return back()->with('success', 'Thêm Thành Công');
         } catch (\Exception $e) {
-
             return back()->with('error', $e->getMessage());
         }
     }

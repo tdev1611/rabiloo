@@ -71,6 +71,7 @@
                                                     <th>#</th>
                                                     <th>Tiều đề</th>
                                                     <th>Category</th>
+                                                    <th>Writer</th>
                                                     <th>Image</th>
                                                     <th>Thời gian hen đăng bài</th>
                                                     <th>Create_at</th>
@@ -79,7 +80,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
 
                                                 @foreach ($posts as $post)
                                                     <tr>
@@ -91,9 +91,12 @@
                                                         <td>
                                                             {{ $post->category->title }}
                                                         </td>
-
                                                         <td>
-                                                            <img src="{{ asset($post->image) }}" alt="{{ $post->title }}">
+                                                            {{ $post->user->name }}
+                                                        </td>
+                                                        <td>
+                                                            <img height="100" src="{{ asset($post->image) }}"
+                                                                alt="{{ $post->title }}">
                                                         </td>
                                                         <td>{{ $post->published_at }}</td>
                                                         <td>{{ $post->created_at }}</td>

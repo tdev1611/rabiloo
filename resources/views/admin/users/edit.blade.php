@@ -30,7 +30,7 @@
                     </ul>
                     <!--end::Breadcrumb-->
                 </div>
-                <a href="{{ route('admin.categories.index') }}" class="btn btn-primary">Back</a>
+                <a href="{{ route('admin.users.index') }}" class="btn btn-primary">Back</a>
             </div>
             <!--end::Toolbar container-->
             {{-- component alert --}}
@@ -57,7 +57,7 @@
                                 <div class="mb-3 col-md-6">
                                     <label for="password" class="form-label"> password </label>
                                     <input type="password" class="form-control" name="password" id="password"
-                                        placeholder="password " value="defautl">
+                                        placeholder="password " value="default">
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="role_id" class="form-label"> Roles </label>

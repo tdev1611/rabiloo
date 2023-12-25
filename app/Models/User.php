@@ -4,11 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Models\Role;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -47,11 +50,20 @@ class User extends Authenticatable
     ];
 
     // method
-    
+
     function posts()
     {
         return $this->hasMany(Post::class);
     }
 
+    function isAdmin()
+    {
 
+        $userRoles = $this->roles->pluck('name')->toArray();
+        $role = Role::all()->pluck('name')->toArray();
+        if (empty(array_intersect($userRoles, $role))) {
+            return false;
+        }
+        return true;
+    }
 }

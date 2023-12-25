@@ -19,12 +19,12 @@
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
     <link href="{{ url('/admin/assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url('/admin/assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
- 
+
     <!--end::Global Stylesheets Bundle-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
- 
+
     {{-- datatable --}}
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     {{-- enddatatable --}}
@@ -369,7 +369,11 @@
                     <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
                         <!--begin::Menu wrapper-->
 
-                        <x-admin.app-sidebar-menu />
+
+                        @role('admin')
+                            <x-admin.app-sidebar-menu />
+                        @endrole
+
                         <!--end::Menu wrapper-->
                     </div>
                     <!--end::sidebar menu-->

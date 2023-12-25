@@ -19,7 +19,7 @@ use App\Http\Controllers\Admin\PostController;
 |
 */
 
-Route::group(['prefix' => 'admin-dashboard'], function () {
+Route::group(['prefix' => 'admin-dashboard', 'middleware' => ['auth', 'role:admin']], function () {
     Route::get('/', function () {
         return view('admin.layout');
     })->name('admin.home');
@@ -46,9 +46,13 @@ Route::group(['prefix' => 'admin-dashboard'], function () {
     // Route::post('categories/action', [CategoryController::class, 'action'])->name('admin.categories.action');
 
 
-     //posts
-     Route::resource('posts', PostController::class, ['as' => 'admin']);
-     Route::get('posts/delete/{id}', [PostController::class, 'delete'])->name('admin.posts.delete');
-     Route::get('posts/restore/{id}', [PostController::class, 'restore'])->name('admin.posts.restore');
-     Route::get('posts/forceDelete/{id}', [PostController::class, 'forceDelete'])->name('admin.posts.forceDelete');
+
+});
+
+Route::group(['prefix' => 'admin-dashboard', 'middleware' => ['auth', 'role:admin|writer']], function () {
+    //posts
+    Route::resource('posts', PostController::class, ['as' => 'admin']);
+    Route::get('posts/delete/{id}', [PostController::class, 'delete'])->name('admin.posts.delete');
+    Route::get('posts/restore/{id}', [PostController::class, 'restore'])->name('admin.posts.restore');
+    Route::get('posts/forceDelete/{id}', [PostController::class, 'forceDelete'])->name('admin.posts.forceDelete');
 });

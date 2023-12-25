@@ -14,7 +14,9 @@
         </ol>
     </nav> --}}
     <div class="row">
-
+        <h3>
+            Chi tiết bài  viết của bạn
+        </h3>
         <div class="col-md-4">
             <div class="item">
                 <img class="img-fluid"
@@ -116,7 +118,7 @@
                 $.ajax({
                     type: 'POST',
                     url: "{{ route('client.likes.store', ['post' => $post->id]) }}",
-
+              
                     dataType: "json",
                     success: function(response) {
                         console.log(response);
@@ -128,7 +130,7 @@
                                     timer: 2000
                                 })
                                 .then((result) => {
-
+                                   
                                 })
                         } else {
                             Swal.fire({
@@ -198,7 +200,6 @@
                 },
                 error: function(error) {
                     console.log(error);
-                    let message = 'U must Login'
                     Swal.fire({
                         icon: 'error',
                         title: error.responseJSON.message,

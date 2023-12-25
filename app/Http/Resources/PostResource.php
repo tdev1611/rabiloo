@@ -20,9 +20,10 @@ class PostResource extends JsonResource
             "slug" => $this->slug,
             "image" => $this->image,
             "desc" => $this->desc,
-            "published_at" => $this->published_at,
+            "published_at" => $this->published_at !== null ? $this->published_at : 'Chưa có' ,
             "is_published" => $this->published_at == 1 ? 'false' : 'true',
             "category" => new CategoryResource($this->category),
+            "writer" => new UserResource($this->user),
             "created_at" => $this->created_at,
 
         ];

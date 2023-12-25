@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Http\Resources\PostResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class PostService
 {
     private $post;
@@ -16,26 +17,32 @@ class PostService
 
     function getAll()
     {
-        $posts =  PostResource::collection($this->post->oldest('id')->with('category')->get());
+        $posts =  PostResource::collection($this->post->oldest('id')->with('category', 'user')->get());
         if (request()->status == 'disabled') {
             $posts = $this->getPostsOnlyTrash();
         }
         return $posts;
     }
- 
+
     function getPostsOnlyTrash()
     {
         $posts = PostResource::collection($this->post->onlyTrashed()
             ->oldest('title')->get());
         return $posts;
-
     }
 
     function find($id)
     {
         $post = $this->post->find($id);
+
         if (!$post) {
-            throw new ModelNotFoundException('not found by ID ' );
+            throw new ModelNotFoundException('not found by ID ');
+        }
+        $userLogin = auth()->user();
+        $userRoles = $userLogin->roles->pluck('name')->toArray();
+        $postAuthorRoles = $post->user->roles->pluck('name')->toArray();
+        if (empty(array_intersect($userRoles, $postAuthorRoles))) {
+            throw new ModelNotFoundException('User does not have permission to access this post');
         }
         return  $post;
     }
@@ -44,7 +51,7 @@ class PostService
     {
         $fileName = $slug . '-' . time() . '.' . strtolower($image->getClientOriginalExtension());
         $path = $image->storeAs('public/posts', $fileName);
-        return "public/posts/" . $fileName;
+        return "storage/posts/" . $fileName;
     }
 
     function store($data)
@@ -68,8 +75,7 @@ class PostService
         }
         $fileName = $slug . '-' . time() . '.' . strtolower($newImage->getClientOriginalExtension());
         $path = $newImage->storeAs('public/posts', $fileName);
-        return "public/posts/" . $fileName;
-
+        return "storage/posts/" . $fileName;
     }
 
 
@@ -88,9 +94,9 @@ class PostService
 
     function findOnlyTrash($id)
     {
-        $post = $this->post->onlyTrashed()->find($id)  ;
+        $post = $this->post->onlyTrashed()->find($id);
         if (!$post) {
-            throw new ModelNotFoundException('not found ID '  );
+            throw new ModelNotFoundException('not found ID ');
         }
         return $post;
     }
@@ -99,8 +105,8 @@ class PostService
     {
         $post = $this->findOnlyTrash($id);
         $category = $post->category;
-        if($category->deleted_at !== null) {
-            throw new ModelNotFoundException('Category not found ' );
+        if ($category->deleted_at !== null) {
+            throw new ModelNotFoundException('Category not found ');
         }
         return $post->restore();
     }
@@ -111,7 +117,4 @@ class PostService
         Storage::delete($post->image);
         return $post->forceDelete();
     }
-
-
-
 }

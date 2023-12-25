@@ -12,6 +12,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ asset('client/css/style.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 </head>
 
 <body>
@@ -30,27 +31,42 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ route('home') }}">Home </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="">Customer Service</a>
-                    </li>
-                    <li class="nav-item">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Các bài viết
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Danh sách bài viết</a></li>
-                                <li><a class="dropdown-item" href="#">Thêm bài viết</a></li>
-                                {{-- <li><hr class="dropdown-divider"></li>
-                              <li><a class="dropdown-item" href="#">Separated link</a></li> --}}
-                            </ul>
+                    <li class="nav-item active ">
+                        <div class="input-group rounded">
+                            <form action="{{ route('search') }}" method="get" class="d-flex">
+                                <input type="search" class="form-control rounded" 
+                                name="search"
+                                placeholder="Search"
+                                    aria-label="Search" aria-describedby="search-addon" />
+
+                                <button type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
                         </div>
                     </li>
 
+                    @auth
+                        <li class="nav-item">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    {{ auth()->user()->name }}
+                                </button>
+
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{{ route('client.postsOwner.index') }}">Danh sách bài
+                                            viết</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('admin.posts.create') }}">Thêm bài viết</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    @endauth
                 </ul>
             </div>
         </nav>
@@ -89,7 +105,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="http://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ url('auth/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
-
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
             setTimeout(function() {

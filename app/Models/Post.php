@@ -6,15 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use EloquentFilter\Filterable;
 
 class Post extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Filterable;
     protected $guarded = [];
-    // protected $attributes = [
-    //     'user_id' => auth()->user()->id,
-    // ];
+
+
+    public function modelFilter()
+    {
+        return $this->provideFilter(\App\ModelFilters\PostFilter::class);
+    }
 
     function getScheduledPosts()
     {
@@ -27,6 +32,10 @@ class Post extends Model
     function category()
     {
         return $this->belongsTo(Category::class)->withTrashed();
+    }
+    function user()
+    {
+        return $this->belongsTo(User::class)->withTrashed();
     }
     function forceDeleted($id)
     {
