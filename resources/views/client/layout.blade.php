@@ -31,14 +31,26 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ route('home') }}">Home </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Danh mục
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                        @foreach ($categories as $category)
+                            
+                        <li><a class="dropdown-item" href="{{ route('client.posts.by.category',$category->slug) }}">{{ $category->title }}</a></li>
+                        @endforeach
+                       
+                        </ul>
+                    </li>
                     <li class="nav-item active ">
                         <div class="input-group rounded">
                             <form action="{{ route('search') }}" method="get" class="d-flex">
-                                <input type="search" class="form-control rounded" 
-                                name="search"
-                                placeholder="Search"
-                                    aria-label="Search" aria-describedby="search-addon" />
-
+                                <input type="search" class="form-control rounded" name="title" placeholder="title"
+                                    aria-label="Search" aria-describedby="search-addon" value="" />
+                                <input type="search" class="form-control rounded" name="author" placeholder="author"
+                                    aria-label="Search" aria-describedby="search-addon" value="" />
                                 <button type="submit">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -49,19 +61,22 @@
                     @auth
                         <li class="nav-item">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+                                <button type="button" style="margin-left:20px" class="btn btn-primary dropdown-toggle"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ auth()->user()->name }}
                                 </button>
 
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ route('client.postsOwner.index') }}">Danh sách bài
-                                            viết</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('admin.posts.create') }}">Thêm bài viết</a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
+                                    @role('admin|writer')
+                                        <li><a class="dropdown-item" href="{{ route('client.postsOwner.index') }}">Danh sách bài
+                                                viết</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('admin.posts.create') }}">Thêm bài viết</a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                    @endrole
+
                                     <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                                 </ul>
                             </div>

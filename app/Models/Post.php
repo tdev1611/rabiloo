@@ -29,6 +29,7 @@ class Post extends Model
             ->get();
     }
 
+    //relation
     function category()
     {
         return $this->belongsTo(Category::class)->withTrashed();
@@ -37,6 +38,12 @@ class Post extends Model
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
+
+    function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tags', 'post_id', 'tag_id');
+    }
+
     function forceDeleted($id)
     {
         $post = $this->onlyTrashed()->find($id);

@@ -24,15 +24,19 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/tim-kiem', [HomeController::class, 'search'])->name('search');
 
 
-Route::group(['prefix' => 'posts'], function () {
-  
+Route::group(['prefix' => 'danh-muc'], function () {
     Route::get('/{slug}', [PostController::class, 'show'])->name('client.posts.show');
-    
+});
+
+Route::group(['prefix' => 'chi-tiet'], function () {
+
+    Route::get('/{slug}', [PostController::class, 'getPostsByCategory'])->name('client.posts.by.category');
+
     Route::post('/{post}/comments', [CommentController::class, 'store'])->name('client.comments.store')->middleware('auth');
     Route::post('/{post}/like', [LikeController::class, 'store'])->name('client.likes.store')->middleware('auth');
 });
 Route::group(['prefix' => '-Bai-viet-cua-ban'], function () {
-  
+
     Route::get('/', [PostOwnerController::class, 'index'])->name('client.postsOwner.index');
     Route::get('/{slug}', [PostOwnerController::class, 'show'])->name('client.postsOwner.show');
 });

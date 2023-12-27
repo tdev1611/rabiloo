@@ -2,10 +2,8 @@
 
 namespace App\ModelFilters;
 
-use App\Models\Category;
-use App\Models\User;
 use EloquentFilter\ModelFilter;
-
+use Illuminate\Contracts\Database\Eloquent\Builder;
 class PostFilter extends ModelFilter
 {
     /**
@@ -15,35 +13,19 @@ class PostFilter extends ModelFilter
      * @var array
      */
     public $relations = [];
-    protected $filterable = [  
-        'title',
-        'category',
-        'user',
-         
-    ];
-    function category()
+  
+  
+
+    public function title($key)
     {
-        return $this->belongsTo(Category::class);
-    }
-    function user()
-    {
-        return $this->belongsTo(User::class);
+        return $this->where('title', 'like', '%' . $key . '%')->where('is_published', 2);
     }
 
-    public function title($title)
+    public function author($key)
     {
-        return $this->where(function ($q) use ($title) {
-            return $q->where('title', 'LIKE', "%$title%");
-        });
+        return $this->WhereHas('user', function (Builder $query) use ($key) {
+            $query->where('name', 'like', '%' . $key . '%');
+        })->where('is_published', 2);
     }
-    // public function onlyShowDeletedForAdmins()
-    // {
-    //     if (auth()->user()->isAdmin()) {
-    //         $this->withTrashed();
-    //     }
-    // }
-    // public function setup()
-    // {
-    //     $this->onlyShowDeletedForAdmins();
-    // }
+
 }

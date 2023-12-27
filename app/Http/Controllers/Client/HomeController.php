@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
-
+use App\Http\Resources\PostResource;
 class HomeController extends Controller
 {
     protected $post;
@@ -16,16 +16,16 @@ class HomeController extends Controller
 
     function index()
     {
-        $posts = $this->post->where('is_published', 2)->withCount('likes')->latest()->get();
+        $qry = $this->post->where('is_published', 2)->withCount('likes')->latest()->paginate(8);
+        $posts = PostResource::collection($qry);
+
         return view('welcome', compact('posts'));
     }
 
     function search(Request $request)
     {
 
-        return Post::filter($request->all())->get();
-        // $userFilter = Auth::user()->isAdmin() ? AdminFilter::class : BasicUserFilter::class;
-
-        // return User::filter($request->all(), $userFilter)->get();
+        $posts= Post::filter($request->all())->paginate(8);
+        return view('client.search.index', compact('posts'));
     }
 }

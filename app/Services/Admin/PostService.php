@@ -40,11 +40,14 @@ class PostService
         }
         $userLogin = auth()->user();
         $userRoles = $userLogin->roles->pluck('name')->toArray();
+        // check admin
+        $isAdmin = in_array('admin', $userRoles);
+        // role post
         $postAuthorRoles = $post->user->roles->pluck('name')->toArray();
-        if (empty(array_intersect($userRoles, $postAuthorRoles))) {
+        if (!($isAdmin || !empty(array_intersect($userRoles, $postAuthorRoles)))) {
             throw new ModelNotFoundException('User does not have permission to access this post');
         }
-        return  $post;
+        return $post;
     }
 
     function upLoadImg($image, $slug)
