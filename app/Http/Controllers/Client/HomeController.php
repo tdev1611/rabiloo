@@ -16,7 +16,7 @@ class HomeController extends Controller
 
     function index()
     {
-        $qry = $this->post->where('is_published', 2)->withCount('likes')->latest()->paginate(8);
+        $qry = $this->post->where('is_published', 2)->withCount('likes')->with('tags', 'user')->latest()->paginate(8);
         $posts = PostResource::collection($qry);
 
         return view('welcome', compact('posts'));

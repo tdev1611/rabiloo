@@ -13,7 +13,7 @@ class Post extends Model
     use HasFactory;
     use SoftDeletes;
     use Filterable;
-    protected $guarded = [];
+    protected $guarded = ['tags'];
 
 
     public function modelFilter()

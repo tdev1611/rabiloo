@@ -14,4 +14,8 @@ class Category extends Model
     {
         return $this->hasMany(Post::class);
     }
+    function getPostsActive()
+    {
+        return $this->hasMany(Post::class)->where('is_published',2);
+    }
 }

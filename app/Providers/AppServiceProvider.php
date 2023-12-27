@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
         //Data With All Views
-        $categories = Category::oldest('title')->whereHas('posts')->get();
+        $categories = Category::oldest('title')->whereHas('getPostsActive')->get();
         View::share('categories', $categories);
     }
 }

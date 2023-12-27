@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Admin\TagController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -45,8 +46,9 @@ Route::group(['prefix' => 'admin-dashboard', 'middleware' => ['auth', 'role:admi
     Route::get('categories/forceDelete/{id}', [CategoryController::class, 'forceDelete'])->name('admin.categories.forceDelete');
     // Route::post('categories/action', [CategoryController::class, 'action'])->name('admin.categories.action');
 
-
-
+    //tags
+    Route::resource('tags', TagController::class, ['as' => 'admin']);
+    Route::get('tags/delete/{id}', [TagController::class, 'delete'])->name('admin.tags.delete');
 });
 
 Route::group(['prefix' => 'admin-dashboard', 'middleware' => ['auth', 'role:admin|writer']], function () {

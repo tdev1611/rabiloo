@@ -35,6 +35,21 @@
         <div class="col-md-6 mt-4">
             <div class="post_name">
                 <span>
+                    @if ($post->tags->count() > 0)
+                    <h3>Tag</h3>
+                    @foreach ($post->tags as $tag)
+                        <span>
+                            <a href="">
+                                {{ $tag->title }}
+                            </a>
+                        </span>
+                    @endforeach
+                    @endif
+                </span>
+            </div>
+
+            <div class="post_name">
+                <span>
                     <h3> {{ $post->title }}</h3>
                 </span>
             </div>
